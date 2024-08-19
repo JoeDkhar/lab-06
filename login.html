@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Arena Access</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+      .container {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding-bottom: 50px;
+      }
+      .logo-small {
+        height: 40px;
+        width: auto;
+      }
+      .navbar-nav .nav-link i, 
+      .dropdown-toggle i, 
+      .footer .list-inline-item i {
+        color: #777; /* Set icon color to #777 */
+      }
+      .navbar-nav .nav-item-last{
+        align-items: end;
+      }
+        body, html {
+            height: 100%;
+        }
+        .content-wrapper {
+            
+            min-height: calc(100% - 56px); /* Adjust 56px if your navbar height is different */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        .form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .input-container {
+            width: 100%;
+            max-width: 300px; /* Adjust as needed */
+            display: flex;
+            justify-content: center;
+        }
+        .input-container input {
+            width: 100%;
+        }
+        .alert-message {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .login-button {
+            margin-top: 1.5rem; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body>
+    <header>
+      <section id="nav-bar">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="index.html"><img src="arena_acess.svg" alt="Logo" class="logo-small"></a>
+        </nav>
+      </section>
+    </header>
+
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="form-container bg-white p-8 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-6 text-center">Login to Arena Access</h2>
+                
+                <div id="successMessage" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 alert-message" role="alert">
+                    <strong class="font-bold">Success!</strong>
+                    <span class="block sm:inline"><br>You have successfully registered. <br>Please log in.</span>
+                </div>
+
+                <form class="form">
+                    <div class="input-container">
+                        <input type="email" id="email" name="email" required placeholder="Email" class="w-full px-3 py-2 border rounded-md">
+                    </div>
+                    <div class="input-container mt-4">
+                        <input type="password" id="password" name="password" required placeholder="Password" class="w-full px-3 py-2 border rounded-md">
+                    </div>
+                    <button type="submit" class="w-full bg-secondary text-white py-2 px-4 rounded-md hover:bg-secondary-dark login-button">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('registrationSuccess') === 'true') {
+            document.getElementById('successMessage').classList.remove('hidden');
+            localStorage.removeItem('registrationSuccess');
+        }
+    });
+    </script>
+</body>
+</html>

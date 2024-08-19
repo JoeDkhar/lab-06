@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="flex justify-center items-center min-h-screen bg-gray-100">
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-6 text-center">Register for Arena Access</h2>
+        <form id="registrationForm">
+            <div class="mb-4">
+                <label for="fullName" class="block text-gray-700">Full Name</label>
+                <div class="relative">
+                    <input type="text" id="fullName" class="form-input mt-1 block w-full border border-gray-300 rounded-lg p-2" placeholder="John Doe">
+                    <span id="fullNameIcon" class="absolute right-2 top-3"></span>
+                </div>
+                <p id="fullNameError" class="text-red-500 text-sm hidden"></p>
+            </div>
+
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700">Email</label>
+                <div class="relative">
+                    <input type="email" id="email" class="form-input mt-1 block w-full border border-gray-300 rounded-lg p-2" placeholder="user@example.com">
+                    <span id="emailIcon" class="absolute right-2 top-3"></span>
+                </div>
+                <p id="emailError" class="text-red-500 text-sm hidden"></p>
+            </div>
+
+            <div class="mb-4">
+                <label for="password" class="block text-gray-700">Password</label>
+                <div class="relative">
+                    <input type="password" id="password" class="form-input mt-1 block w-full border border-gray-300 rounded-lg p-2" placeholder="••••••••">
+                    <span id="passwordIcon" class="absolute right-2 top-3"></span>
+                </div>
+                <p id="passwordError" class="text-red-500 text-sm hidden"></p>
+            </div>
+
+            <div class="mb-4">
+                <label for="confirmPassword" class="block text-gray-700">Confirm Password</label>
+                <div class="relative">
+                    <input type="password" id="confirmPassword" class="form-input mt-1 block w-full border border-gray-300 rounded-lg p-2" placeholder="••••••••">
+                    <span id="confirmPasswordIcon" class="absolute right-2 top-3"></span>
+                </div>
+                <p id="confirmPasswordError" class="text-red-500 text-sm hidden"></p>
+            </div>
+
+            <div class="mb-4">
+                <label for="dateOfBirth" class="block text-gray-700">Date of Birth</label>
+                <div class="relative">
+                    <input type="date" id="dateOfBirth" class="form-input mt-1 block w-full border border-gray-300 rounded-lg p-2">
+                    <span id="dateOfBirthIcon" class="absolute right-2 top-3"></span>
+                </div>
+                <p id="dateOfBirthError" class="text-red-500 text-sm hidden"></p>
+            </div>
+
+            <button type="submit" id="submitButton" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg w-full mt-4 opacity-50 cursor-not-allowed" disabled>Register</button>
+        </form>
+    </div>
+    <script>
+       document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('registrationForm');
+    const submitButton = document.getElementById('submitButton');
+    const inputs = form.querySelectorAll('input');
+
+    const validationRules = {
+        fullName: {
+            regex: /^[A-Za-z\s]{3,}$/,
+            error: 'Please enter a valid full name (only letters and spaces, minimum 3 characters).'
+        },
+        email: {
+            regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            error: 'Please enter a valid email address.'
+        },
+        password: {
+            regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+            error: 'Password must be at least 8 characters long and contain both letters and numbers.'
+        },
+        confirmPassword: {
+            validate: (value) => value === document.getElementById('password').value,
+            error: 'Passwords do not match.'
+        },
+        dateOfBirth: {
+            validate: (value) => {
+                const birthDate = new Date(value);
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                return age >= 18;
+            },
+            error: 'You must be at least 18 years old to register.'
+        }
+    };
+
+    inputs.forEach(input => {
+        input.addEventListener('input', () => {
+            validateInput(input);
+            updateSubmitButton();
+        });
+        input.addEventListener('blur', () => {
+            validateInput(input);
+            updateSubmitButton();
+        });
+    });
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (validateForm()) {
+            window.location.href = 'login.html';
+        }
+    });
+
+    function validateInput(input) {
+        const rule = validationRules[input.id];
+        const errorElement = document.getElementById(`${input.id}Error`);
+        const iconElement = document.getElementById(`${input.id}Icon`);
+
+        let isValid;
+        if (rule.regex) {
+            isValid = rule.regex.test(input.value);
+        } else if (rule.validate) {
+            isValid = rule.validate(input.value);
+        }
+
+        if (isValid) {
+            setValid(input, errorElement, iconElement);
+        } else {
+            setInvalid(input, errorElement, iconElement, rule.error);
+        }
+    }
+
+    function setInvalid(input, errorElement, iconElement, message) {
+        input.classList.add('border-red-500');
+        input.classList.remove('border-green-500');
+        errorElement.textContent = message;
+        errorElement.classList.remove('hidden');
+        iconElement.textContent = '❌';
+        iconElement.classList.add('text-red-500');
+        iconElement.classList.remove('text-green-500');
+    }
+
+    function setValid(input, errorElement, iconElement) {
+        input.classList.remove('border-red-500');
+        input.classList.add('border-green-500');
+        errorElement.classList.add('hidden');
+        iconElement.textContent = '✅';
+        iconElement.classList.remove('text-red-500');
+        iconElement.classList.add('text-green-500');
+    }
+
+    function validateForm() {
+        let isValid = true;
+        inputs.forEach(input => {
+            validateInput(input);
+            if (input.classList.contains('border-red-500')) {
+                isValid = false;
+            }
+        });
+        return isValid;
+    }
+
+    function updateSubmitButton() {
+        const isFormValid = validateForm();
+        submitButton.disabled = !isFormValid;
+        submitButton.classList.toggle('opacity-50', !isFormValid);
+        submitButton.classList.toggle('cursor-not-allowed', !isFormValid);
+    }
+});
+
+    </script>
+</body>
+</html>
